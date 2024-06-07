@@ -1,0 +1,32 @@
+# This workflow performs integration tests on the app.
+
+name: Integration tests
+
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - ci/*
+
+jobs:
+  integration-tests:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: "Fetch the repository's code to the runner machine"
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+      
+    - name: Testing
+      run: ./mvnw clean integration-test
